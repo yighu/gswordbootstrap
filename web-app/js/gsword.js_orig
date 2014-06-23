@@ -1,0 +1,682 @@
+var selectedbooks=new Array();
+
+function dailydevotion(book){
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/devotion",
+  data: { devotion: book}
+})
+  .done(function( msg ) {
+   updateForm(msg);
+  });
+}
+function updateChaptersperbible(bible){
+
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/getChaps",
+  data: { bible: bible}
+})
+  .done(function( msg ) {
+	console.log("data from updateChatpersperbible");
+	console.log(msg);
+   updateChaptersbybook(bible,msg);
+  });
+}
+function addBooks(selected){
+        var len=selectedbooks.length;
+        if (len<4&&selected.length>0){
+        var index=selectedbooks.indexOf(selected);
+        if (index==-1){
+                selectedbooks.push(selected);
+        }
+        }
+}
+function removeBooks(selected){
+        var index=selectedbooks.indexOf(selected);
+        if (index!=-1){
+                selectedbooks.splice(index,1);
+        }
+}
+function flipBooks(selected){
+        var index=selectedbooks.indexOf(selected);
+        var len=selectedbooks.length;
+        if (index==-1&&len<4){
+                selectedbooks.push(selected);
+        }else{
+                selectedbooks.splice(index,1);
+	}
+}
+function flip_parallel(){
+        //flipBooks(getParallel());
+        locate();
+        }
+function pick_parallel(){
+        addBooks(getParallel());
+        locate();
+        }
+function unpick_parallel(){
+        removeBooks(getParallel());
+     locate();
+        }
+function getBooks(){
+        var mainbook=getBook();
+  	var parallel=  $('#parallels').val();
+  	var commentary=  $('#commentaries').val();
+	var bk=mainbook;
+	if(parallel.length>1)bk=bk+","+parallel;
+	if(commentary.length>1)bk=bk+","+commentary;
+	return bk
+}
+function getDictionary()
+{
+  return $("#dictionaries").val();
+}
+function getCommentary()
+{
+  return $("#commentaries").val();
+}
+function getParallel()
+{
+	console.log("paral:"+ $("#parallels").val());
+  return $("#parallels").val();
+}
+
+function searchBible(){
+    var bible=$('#books').val()  ;
+    var key=$('#keyword').val();
+    if (key){
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/searchBible",
+  data: { bible: bible, key: key }
+})
+  .done(function( msg ) {
+    updateForm(msg);
+  });
+
+    }else{
+        locate()               ;
+    }
+}
+
+function locate(){
+  var bible=getBooks();
+  var reference=$('#reference').val();
+
+console.log("locate ref:"+reference);
+console.log("bible:"+bible);
+console.log("locate ref:"+reference);
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/display",
+  data: { bible: bible, key: reference,start:verseStart,limit:verseLimit}
+})
+  .done(function( msg ) {
+	console.log(msg);
+    updateForm(msg);
+  });
+}
+  function setInfo(msg){
+  $('#info').html(msg);
+  }
+  function updateAuxForm(e){
+	console.log(e);
+      if(e.data){
+      $('#auxform').html(e.data);
+   showLayer('closeaux') ;
+      }
+}
+  function updateForm(result){
+      if(result.data){
+
+      $('#liveform').html(result.data);
+      }
+      if(result.verses){
+
+      $('#reference').val(result.verses);
+      }
+      if( result.total){
+
+        $('#total').val(result.total);
+      }
+  }
+ function openwin(e){
+	var ptf="http://www.ccimweb.org/gsword/"+e.data;
+          setInfo("<a href=\""+ptf+"\">Download PowerPoint Here</a>") ;
+          popup(ptf, "PowerPoint") ;
+
+  }
+
+function popup(mylink, windowname)
+{
+if (!window.focus)return true;
+var href;
+if (typeof(mylink) == 'string')
+   href=mylink;
+else
+   href=mylink.href;
+window.open(href, windowname, ',type=fullWindow,fullscreen,scrollbars=yes');
+return false;
+}
+
+ function updateReference(e){
+      var fom=$('#reference');
+      fom.html(e.responseText);
+  }
+var verseStart=0           ;
+var verseLimit=10           ;
+function prev()
+{
+        verseStart=verseStart-verseLimit;
+        if (verseStart<0){
+                verseStart=0;
+        }
+    return page( verseStart)  ;
+
+}
+function nextstep()
+{
+
+    var total=$('#total').val();
+        if (verseStart<0){
+            verseStart=0   ;
+        }
+        verseStart=verseStart+verseLimit;
+        if (verseStart>total){
+                verseStart=0;
+        }
+console.log("nextstep:"+verseStart);
+  return   page( verseStart)  ;
+
+}
+function page(startv){
+var book=getBooks();
+  var ref  = $('#reference').val();
+console.log("page:"+book+" "+ref);
+  if (book && ref)
+  {
+    getOsis(book, ref, startv,verseLimit);
+      return true;
+  }
+    return false;
+}
+function getOsis(bible,ref,start,limit){
+console.log("in getOSIS :"+bible);
+console.log(ref);
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/getOsis",
+  data: { bible: bible, reference: ref,start:start,limit:limit}
+})
+  .done(function( msg ) {
+    updateForm(msg);
+  });
+}
+function getBook()
+{
+  var bk=$('#books').val();
+        if(!bk){
+        bk='ChiUns';
+        setBook(bk);
+        }
+	console.log("getBook:"+bk);
+        return bk;
+}
+function setBook(data){
+    $('#books').val(data);
+    return false;
+}
+ function setPassage(data){
+ $('#reference').val(data);
+     locate();
+     return false;
+ }
+ function handlePassage(data){
+ $('#reference').val(data);
+     locate();
+     return false;
+ }
+function updateChapters(data)
+{
+  var bk=$('#chapters');
+       var dd=data;
+  $('#chapters').options[0] = new Option("All Chapters",0);
+ var chps=""
+    var book=$('#bibles').val();
+for (i = 0; i < dd.nchaps; i++) {
+  var newOption = document.createElement("OPTION");
+  newOption.text=1+i;
+  newOption.value=1+i;
+  $('#chapters').options[i] = new Option(newOption.text,newOption.value);
+  chps=chps+ "<button onclick='readChap(&quot;"+book +" "+(1+i) +"&quot;);'>"+(1+i)+"</button>";
+
+}
+ $('#chapters').length = dd.nchaps+1;
+ $('chaps').html(chps);
+}
+
+function updateChaptersbybookx(bible,data)
+{
+  var bk=$('#chapters');
+       var dd=data;
+  $('#chapters').options[0] = new Option("All Chapters",0);
+ var chps=""
+    var book=bible;
+for (i = 0; i < data.nchaps; i++) {
+  var newOption = document.createElement("OPTION");
+  newOption.text=1+i;
+  newOption.value=1+i;
+  $('#chapters').options[i] = new Option(newOption.text,newOption.value);
+  chps=chps+ "<button onclick='return readChap(&quot;"+book +" "+(1+i) +"&quot;);'>"+(1+i)+"</button>" ;
+}
+ $('#chapters').length = data.nchaps+1;
+console.log("chps:"+chps);
+ $('#chaps').html(chps);
+}
+
+function updateChaptersbybook(bible,data)
+{
+console.log("updateChaptersbybook");
+  var bk=$('#chapters');
+  var book=bible;
+ var chps=""
+  $('#chapters').html("");
+var lst = $('#chapters')[0]; 
+for (i = 0; i < data.nchaps; i++) {
+    lst.options[lst.options.length] = new Option(i+1, i+1);
+    chps=chps+ "<button onclick='return readChap(&quot;"+book+" " +(1+i) +"&quot;);'>"+(1+i)+"</button>" ;
+}; 
+  $('#chapters').val(lst);
+ $('#chaps').html(chps);
+}
+function setChaps(bible){
+	console.log("in setChapts");
+	console.log(bible);
+//$('#bibles').text(bible);
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/getChaps",
+  data: { bible: bible}
+})
+  .done(function( msg ) {
+	console.log(msg);
+   updateChaptersbybook(bible,msg)
+  });
+
+     updateReference(bible+" 1");
+           return false;
+}
+
+function readChap(ref){
+    $('#reference').val(ref);
+   // getOsis($('#books').val(),ref,0,500) ;
+    locate();
+    return false;
+}
+function updateReference(data){
+console.log("updateRef "+data);
+console.log(data);
+ $('#reference').val(data)    ;
+    locate()       ;            ;
+}
+function searchDictionary(){
+    var dic=$('#dictionaries').val()        ;
+    var key=$('#keyword').val()              ;
+if(key!=null) $.ajax({
+  type: "POST",
+  url: "/gsword/gbook/searchDictionary",
+  data: { dic: dic,key:key}
+})
+  .done(function( msg ) {
+	console.log(msg);
+   updateDict(msg);
+  });
+
+}
+function searchDictionaryp(){
+    var dic=$('dictionariesp')        ;
+    var key=$('#keyp').val()              ;
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/searchDictionary",
+  data: { dic: bible, key: key}
+})
+  .done(function( msg ) {
+    updateDictp(msg);
+  });
+
+}
+function tweet(){
+    
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/ontwitter",
+  data: { dic: bible, key: key}
+})
+  .done(function( msg ) {
+    twitter(msg);
+  });
+  //  Tweek.begin();
+}
+function updateDict(data){
+	showBox(data.data);
+}
+function updateDictp(data){
+	showBox(data.data);
+}
+function twitter(data){
+	showBox(data.data);
+}
+   function getPassage(){
+   return $('#reference').val();
+   }
+function flip_commentary()
+{
+  var dict=  $('#commentaries').val();
+  var ref  = getPassage();
+  if (dict&& ref)
+  {
+	locate();
+  }
+}
+function pick_commentary()
+{
+  var dict=  $('#commentaries').val();
+  var ref  = getPassage();
+  if (dict&& ref)
+  {
+        addBooks(dict);
+	locate();
+      
+  //  return false;
+  }
+ // return false;
+}
+function unpick_commentary()
+{
+  var dict= $('#commentaries').val();
+  var ref  = getPassage();
+  if (dict&& ref)
+  {
+        removeBooks(dict);
+	locate();
+  //  return false;
+  }
+  //return false;
+}
+  function showword(bible){
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/daily",
+  data: { bible: bible }
+})
+  .done(function( msg ) {
+    updateForm(msg);
+  });
+  setBook(bible);
+  }
+ function doSearch(){
+     var key="";
+     var range=$('#range').val();
+     if (range=='Custom'){
+        var custrange=$('#customrange').val();
+        if (custrange){
+          key="["+custrange+"]";
+        }
+     }else{
+       var b=1+range.indexOf('\(');
+       var e=range.indexOf('\)');
+        if (b>1){
+        key="["+range.substring(b,e)+"]";
+        }
+       var phrase=$('#phrase').val();
+     if(phrase){
+     key+=" \""+phrase+"\"";
+     }
+     }
+       var inwords=$('#inwords').val();
+     if(inwords){
+      key+=" +"+inwords;
+     }
+       var exwords=$('#exwords').val();
+       if(exwords){
+      key+=" -"+exwords;
+     }
+       var seems=$('#seems').val();
+     if(seems){
+       key+=" "+seems+"~ ";
+     }
+       var starts=$('#starts').val();
+       if(starts){
+       key+=" "+starts+"* ";
+     }
+        
+       $('#keyword').val(key);
+	searchBible();
+   }
+
+function sendmail(){
+    var name=$('#username').val()                    ;
+    var email=$('#useremail').val()                   ;
+    var comment=$('#usercomment').val()                ;
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/sendmail",
+  data: { name: name,email:email,comment:comment}
+})
+  .done(function( msg ) {
+    displaymailsendresponse(msg);
+  });
+       return false;
+   }
+function displaymailsendresponse(e){
+       var result=e.responseText;
+
+      var fom=$('emailstatus');
+      fom.innerHTML=result;
+}
+function genppt(){
+    setInfo("Please wait generating PowerPoint.....")  ;
+    var bible=getBook();
+    var reference=$('#reference').val();
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/ppt",
+  data: { version: bible,key:reference}
+})
+  .done(function( msg ) {
+    openwin(msg);
+  });
+}
+
+function showxref(){
+    var bible=getBooks();
+    var reference=$('#reference').val();
+
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/flipXRef",
+  data: { version: bible,key:reference,start:verseStart,limit:verseLimit }
+})
+  .done(function( msg ) {
+    updateForm(msg);
+  });
+}
+
+function showheadings(){
+    var bible=getBooks();
+    var reference=$('#reference').val();
+
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/flipHeadings",
+  data: { version: bible,key:reference,start:verseStart,limit:verseLimit }
+})
+  .done(function( msg ) {
+    updateForm(msg);
+  });
+}
+
+function showstrongs(){
+    var bible=getBooks();
+    var reference=$('#reference').val();
+	console.log("show strongs:"+bible+" ref:"+reference);
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/flipStrongs",
+  data: { version: bible,key:reference,start:verseStart,limit:verseLimit }
+})
+  .done(function( msg ) {
+    updateForm(msg);
+  });
+}
+
+function shownotes(){
+    var bible=getBooks();
+    var reference=$('#reference').val();
+
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/flipNotes",
+  data: { version: bible,key:reference,start:verseStart,limit:verseLimit }
+})
+  .done(function( msg ) {
+    updateForm(msg);
+  });
+}
+function donothing(){
+}
+function showmorph(){
+ var bible=getBooks();
+    var reference=$('#reference').val();
+
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/flipMorph",
+  data: { version: bible,key:reference,start:verseStart,limit:verseLimit }
+})
+  .done(function( msg ) {
+    updateForm(msg);
+  });
+}
+function showverseline(){
+var bible=getBooks();
+    var reference=$('#reference').val();
+            
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/flipVline",
+  data: { version: bible,key:reference,start:verseStart,limit:verseLimit }
+})
+  .done(function( msg ) {
+    updateForm(msg);
+  });
+}
+function doProtocol(protocol,lemma){
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/handleProtocol",
+  data: { protoc: protocol,key:lemma,start:verseStart,limit:verseLimit }
+})
+  .done(function( msg ) {
+	console.log("maf:");
+	console.log(msg);
+    showProtocolData(msg);
+  });
+    return false;
+}
+function showProtocolData(e){
+      showBox(e.result); 
+    return false;
+}
+function showBox(e){
+console.log("showbox:"+e);
+if(e!=null) $('#display_dict').html("<b>Click to close the dictionary</b><br/>"+e);
+return false;
+}
+function offBox(){
+     $('#display_dict').html("");
+}
+function offAuxform(){
+     $('#auxform').html("");
+   hideLayer('closeaux') ;
+}
+function changeLocale(){
+    
+    location.reload("/gsword/gbook/v?lang=\'"+$('#lang').val()+"\'");
+    return false;
+
+}
+ function custom(){
+  var cust=$('#range').val();
+     
+     if (cust=='Custom'){
+     showLayer('xcustomrange');
+     }else{
+         hideLayer('xcustomrange');
+     }
+     return false;
+ }
+   function showLayer(divName) {
+        document.getElementById(divName).style.display = "";
+        document.getElementById(divName).style.visibility = 'visible';
+    }
+
+    function hideLayer(divName) {
+        document.getElementById(divName).style.display = "none";
+        document.getElementById(divName).style.visibility = 'hidden';
+    }
+var helptxt;
+var commentform;
+function showhelp(){
+    if (helptxt) $('liveform').innerHTML=helptxt;
+    else $.ajax({
+  	type: "POST",
+  	url: "/gsword/gbook/fetchHelp",
+	})
+  		.done(function( msg ) {
+    			updateAuxForm(msg);
+  		});
+      }
+function showcomment(){
+      var fom=$('liveform');
+    if (commentform) $('liveform').innerHTML=commentform;
+    else $.ajax({
+  	type: "POST",
+  	url: "/gsword/gbook/fetchCommentForm",
+	})
+  		.done(function( msg ) {
+    			updateAuxForm(msg);
+  		});
+      }
+	
+function showadvsearch(){
+    if (commentform) $('#liveform').html(commentform);
+    else $.ajax({
+  	type: "POST",
+  	url: "/gsword/gbook/advsearch",
+	})
+  		.done(function( msg ) {
+		console.log("showadvsearch:"+msg);
+    			updateAuxForm(msg);
+  		});
+      }
+	
+function searchGen(){
+    var chap=$('#genbooksch').val()  ;
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/gentxtremote",
+  data: { key: chap}
+}).done(function( msg ) {
+   updateFormgen(msg);
+  });
+}
+
+  function updateFormgen(result){
+      if(result.data){
+      $('#genform').html(result.data);
+      }
+  }
+
