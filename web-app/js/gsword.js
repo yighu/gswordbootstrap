@@ -1,4 +1,6 @@
 var selectedbooks=new Array();
+var console=console||{};
+console.log=console.log||function(){};
 
 function dailydevotion(book){
 $.ajax({

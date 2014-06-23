@@ -1,0 +1,31 @@
+<plugin name='feeds' version='1.6' grailsVersion='1.3 &gt; *'>
+  <title>Render RSS/Atom feeds with a simple builder</title>
+  <description>This plugin adds a feedType and feedVersion parameters to the render method of controllers, which if passed
+a valid feed type such as "rss" or "atom" and a version will expect a closure to be passed with render,
+which will render a feed using a custom builder. The FeedBuilder used for this accepts entry and content nodes, any properties
+of which can be set within the builder. These are beans from the ROME API so all properties there
+should work.
+	</description>
+  <documentation>http://grails.org/plugin/feeds</documentation>
+  <type>FeedsGrailsPlugin</type>
+  <resources>
+    <resource>grails.plugin.feeds.TestController</resource>
+    <resource>FeedsTagLib</resource>
+  </resources>
+  <repositories>
+    <repository name='grailsCentral' url='http://plugins.grails.org' />
+    <repository name='http://repo.grails.org/grails/plugins' url='http://repo.grails.org/grails/plugins/' />
+    <repository name='http://repo.grails.org/grails/core' url='http://repo.grails.org/grails/core/' />
+    <repository name='grailsCore' url='http://svn.codehaus.org/grails/trunk/grails-plugins' />
+    <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
+  </repositories>
+  <dependencies>
+    <compile>
+      <dependency group='rome' name='rome' version='0.9' />
+      <dependency group='rome' name='modules' version='0.3.2' />
+    </compile>
+  </dependencies>
+  <plugins />
+  <runtimePluginRequirements />
+  <behavior />
+</plugin>
