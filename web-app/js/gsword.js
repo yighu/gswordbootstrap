@@ -145,7 +145,7 @@ $.ajax({
       }
   }
  function openwin(e){
-	var ptf="http://www.ccimweb.org/gsword/"+e.data;
+	var ptf="http://www.ccimweb.org/gsword/pt/"+e.data;
           setInfo("<a href=\""+ptf+"\">Download PowerPoint Here</a>") ;
           popup(ptf, "PowerPoint") ;
 
