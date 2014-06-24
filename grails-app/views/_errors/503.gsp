@@ -29,7 +29,7 @@
 						<i class="glyphicon glyphicon-chevron-left icon-white"></i>
 						<g:message code="error.button.backToHome"/>
 					</a>
-					<a href="${createLink(uri: '/contact')}" class="btn btn-large btn-success">
+					<a href="${createLink(uri: '/gbook/contactus')}" class="btn btn-large btn-success">
 						<i class="glyphicon glyphicon-envelope"></i>
 						<g:message code="error.button.contactSupport"/>
 					</a>					

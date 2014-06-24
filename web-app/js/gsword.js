@@ -1,6 +1,7 @@
 var selectedbooks=new Array();
-var console=console||{};
-console.log=console.log||function(){};
+var console=console||{}; //make console not break on ie
+//console.log=console.log||function(){};//turn this on for dev
+console.log=function(){}; //turn off log before prod build
 
 function dailydevotion(book){
 $.ajax({

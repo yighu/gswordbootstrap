@@ -25,7 +25,7 @@
 			</a>
 		</li>
 		<li class="">
-			<a href="${createLink(uri: '/contact')}">
+			<a href="${createLink(uri: '/gbook/contactus')}">
 				<i class="glyphicon glyphicon-envelope"></i>
 				<g:message code="default.contact.label"/>
 			</a>
