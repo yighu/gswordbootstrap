@@ -683,3 +683,30 @@ $.ajax({
       }
   }
 
+function strong4tips(obj){
+
+if(!$(obj).attr('data-original-title')){
+	$(obj).attr('data-original-title', $(obj).val());
+}
+	 $(obj).tooltip('show',{
+        placement: "bottom",
+	html:true
+    	});
+}
+
+function doStrongs(obj,protocol,lemma){
+if(!$(obj).attr('data-original-title')){
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/handleProtocol",
+  data: { protoc: protocol,key:lemma,start:verseStart,limit:verseLimit }
+})
+  .done(function( msg ) {
+	$(obj).attr('data-original-title', msg.result);
+	 $(obj).tooltip('show',{
+        placement: "bottom",
+	html:true
+    	});
+  });
+}
+}

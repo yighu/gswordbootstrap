@@ -22,7 +22,6 @@
 				</ul>
 			</div>
 		</div>
-	
 		<p class="pull-right"><a href="#">Back to top</a></p>
 	</div>
 

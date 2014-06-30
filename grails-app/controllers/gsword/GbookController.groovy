@@ -1413,6 +1413,7 @@ def shortnames_eng=[" ","Gen",
   }
 
   //  private static final     URL xslurl = ResourceUtil.getResource("xsl/cswing/simple.xsl");
+  //private static final URL xslurl = ResourceUtil.getResource("iBD_tooltips.xsl");
   private static final URL xslurl = ResourceUtil.getResource("iBD.xsl");
 
 private String readStyledText(String bookInitials, String reference, int start, int maxKeyCount) throws NoSuchKeyException, BookException, SAXException {
