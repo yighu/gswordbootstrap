@@ -1,4 +1,5 @@
 package gsword
+import javax.servlet.http.HttpSession
 import org.crosswire.common.xml.*
 import org.crosswire.jsword.book.*
 import org.crosswire.jsword.book.sword.SwordBookPath
@@ -649,4 +650,62 @@ println "done index..."
    // me.listkey("ZhEnglish","love")
     
   }
+
+
+
+  def getBibles(HttpSession session) {
+
+    if (session.currentlaunage.equals("English")) {
+      return getBiblesContainer().english
+    } else {
+      return getBiblesContainer().chinese
+    }
+
+  }
+   
+  def biblecontainer = new Expando()
+  def getBiblesContainer(){
+	if (!biblecontainer.english){
+	def usbibles=updateBibles(Locale.US)
+	def chinesebibles=updateBibles(Locale.CHINA)
+	biblecontainer.english=usbibles		
+	biblecontainer.chinese=chinesebibles		
+	}
+	biblecontainer
+	}
+  def updateBibles(Locale loc) {
+
+  def bibles = new ArrayList()
+  def biblekeymap= new HashMap()
+
+      int nbook = BibleInfo.booksInBible();
+
+      BibleNames bn = new BibleNames(loc)
+
+      try {
+        for (int i = 1; i <= nbook; i++)
+
+        {
+
+          def gb = new Expando()
+          gb.key = BibleInfo.getBookName(i).getShortName()
+          gb.shortname = bn.getShortName(i)
+          gb.cname = bn.getName(i)
+          gb.longname = BibleInfo.getBookName(i).getLongName()
+          biblekeymap.put(gb.longname, gb.cname)
+          biblekeymap.put(gb.shortname, gb.cname)
+          biblekeymap.put(gb.key, gb.cname)
+          bibles.add(gb)
+        }
+
+
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+  def container = new Expando()
+  container.bibles=bibles
+  container.biblekeymap=biblekeymap
+  container
+  }
+
 }

@@ -64,18 +64,12 @@ class GbookController {
       if (langename.equals("English")) {
         if (session.englishbibles == null) {
 
-          updateBibles(Locale.US)
-          session.englishbibles = bibles
-          session.englishbiblekeymap = biblekeymap
+          session.englishbibles = jswordService.getBiblesContainer().english.bibles
+          session.englishbiblekeymap = jswordService.getBiblesContainer().english.biblekeymap
+          bibles = session.englishbibles
+          biblekeymap = session.englishbiblekeymap
 
         } else {
-/*
-          if(!session.englishbibles) {
-		updateBibles(Locale.US)
-          session.englishbibles = bibles
-          session.englishbiblekeymap = biblekeymap
-		}
-*/
           bibles = session.englishbibles
           biblekeymap = session.englishbiblekeymap
 
@@ -84,19 +78,11 @@ class GbookController {
 
         if (session.chinesebibles == null) {
 
-          updateBibles(Locale.CHINA)
-
-          session.chinesebibles = bibles
-          session.chinesebiblekeymap = biblekeymap
-
+          session.chinesebibles = jswordService.getBiblesContainer().chinese.bibles
+          session.chinesebiblekeymap = jswordService.getBiblesContainer().chinese.biblekeymap
+          bibles = session.chinesebibles
+          biblekeymap = session.chinesebiblekeymap
         } else {
-/*
-          if(!session.chinesebibles) {
-		updateBibles(Locale.CHINA)
-          session.chinesebibles = bibles
-          session.chinesebiblekeymap = biblekeymap
-		}
-*/
           bibles = session.chinesebibles
           biblekeymap = session.chinesebiblekeymap
         }
@@ -175,7 +161,7 @@ private convertNonAscii(String s) {
   }
 
   def gentxt = {
-    def layers = params.key?.decodeHTML().split("${DELIM}")
+    def layers = params.key?.decodeHTML()?.split("${DELIM}")
     def nl = layers.size()
     Book book = jswordService.getBook(layers[0]);
     Key key = book.getGlobalKeyList();
@@ -289,13 +275,6 @@ private convertNonAscii(String s) {
 
   }
   def language_change = {
-    /* def lang=params.lang
-    if (lang?.equals("en_US")){
-      updateBibles(Locale.US)
-
-    } else{
-    updateBibles(Locale.CHINA)
-    }*/
     redirect(action: "v", params: params)
 
   }
@@ -444,7 +423,7 @@ cat.each{c->
     List dictionaries = Books.installed().getBooks(BookFilters.getDictionaries());
     List commentaries = Books.installed().getBooks(BookFilters.getCommentaries());
     List devotions = Books.installed().getBooks(BookFilters.getDailyDevotionals());
-    def bibles = getBibles(session)
+    def bibles = jswordService.getBibles(session).bibles
     def bible = "KJV"
     def chapters = jswordService.getChapters(bible);
     def mainbooks = new ArrayList()
@@ -534,7 +513,7 @@ cat.each{c->
     List dictionaries = Books.installed().getBooks(BookFilters.getDictionaries());
     List commentaries = Books.installed().getBooks(BookFilters.getCommentaries());
     List devotions = Books.installed().getBooks(BookFilters.getDailyDevotionals());
-    def bibles = getBibles(session)
+    def bibles = jswordService.getBibles(session).bibles
     def bible = "KJV"
     def chapters = jswordService.getChapters(bible);
     def mainbooks = new ArrayList()
@@ -601,7 +580,7 @@ cat.each{c->
     List dictionaries = Books.installed().getBooks(BookFilters.getDictionaries());
     List commentaries = Books.installed().getBooks(BookFilters.getCommentaries());
     List devotions = Books.installed().getBooks(BookFilters.getDailyDevotionals());
-    def bibles = getBibles(session)
+    def bibles = jswordService.getBibles(session).bibles
     def bible = "KJV"
     def chapters = jswordService.getChapters(bible);
     def mainbooks = new ArrayList()
@@ -707,10 +686,10 @@ cat.each{c->
     SlideShow ppt = new SlideShow();
     if (params.version?.equals("KJV")) {
       if (session.englishbibles == null) {
-        updateBibles(Locale.US)
-        session.englishbibles = bibles
-        session.englishbiblekeymap = biblekeymap
-
+          session.englishbibles = jswordService.getBiblesContainer().english.bibles
+          session.englishbiblekeymap = jswordService.getBiblesContainer().english.biblekeymap
+          bibles = session.englishbibles
+          biblekeymap = session.englishbiblekeymap
       }
       bibles = session.englishbibles
       biblekeymap = session.englishbiblekeymap
@@ -718,9 +697,11 @@ cat.each{c->
     } else {
       if (session.chinesebibles == null) {
 
-        updateBibles(Locale.CHINA)
-        session.chinesebibles
-        session.chinesebiblekeymap = biblekeymap
+          session.chinesebibles = jswordService.getBiblesContainer().chinese.bibles
+          session.chinesebiblekeymap = jswordService.getBiblesContainer().chinese.biblekeymap
+
+          bibles = session.chinesebibles
+          biblekeymap = session.chinesebiblekeymap
 
       }
       bibles = session.chinesebibles
@@ -786,9 +767,11 @@ cat.each{c->
   def excl = {
     if (params.version?.equals("KJV")) {
       if (session.englishbibles == null) {
-        updateBibles(Locale.US)
-        session.englishbibles = bibles
-        session.englishbiblekeymap = biblekeymap
+
+          session.englishbibles = jswordService.getBiblesContainer().english.bibles
+          session.englishbiblekeymap = jswordService.getBiblesContainer().english.biblekeymap
+          bibles = session.englishbibles
+          biblekeymap = session.englishbiblekeymap
 
       }
       bibles = session.englishbibles
@@ -797,9 +780,11 @@ cat.each{c->
     } else {
       if (session.chinesebibles == null) {
 
-        updateBibles(Locale.CHINA)
-        session.chinesebibles
-        session.chinesebiblekeymap = biblekeymap
+          session.chinesebibles = jswordService.getBiblesContainer().chinese.bibles
+          session.chinesebiblekeymap = jswordService.getBiblesContainer().chinese.biblekeymap
+
+          bibles = session.chinesebibles
+          biblekeymap = session.chinesebiblekeymap
 
       }
       bibles = session.chinesebibles
@@ -1278,25 +1263,6 @@ xml.records() {
   def private bibles = new ArrayList()
   def private biblekeymap = new HashMap()
 
-  private getBibles(HttpSession session) {
-    /*      def locale=session.currentlocale
-    if (bibles.isEmpty()) {
-      println "locale "+locale
-      println " bible is empty. update locale default"
-      updateBibles(locale)
-    }else{
-       updateBibles(locale)
-    }*/
-    if (session.currentlaunage.equals("English")) {
-      return session.englishbibles
-    } else {
-      return session.chinesebibles
-
-    }
-
-    return session.chinesebibles
-  }
-  
   def getEnglishShortnames(){
       int nbook = BibleInfo.booksInBible();
       	BibleNames bn = new BibleNames(Locale.US)
