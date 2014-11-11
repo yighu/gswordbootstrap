@@ -22,7 +22,10 @@
 				</ul>
 			</div>
 		</div>
-		<p class="pull-right"><a href="#">Back to top</a></p>
+		<p class="pull-right"><a href="#">Back to top 
+<g:message code="studio" />
+</a></p>
+
 	</div>
 
 <div id="noteform" name="noteform"/>

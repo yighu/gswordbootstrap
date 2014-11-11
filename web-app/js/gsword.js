@@ -2,6 +2,18 @@ var selectedbooks=new Array();
 var console=console||{}; //make console not break on ie
 //console.log=console.log||function(){};//turn this on for dev
 console.log=function(){}; //turn off log before prod build
+var eventType = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent) ) ? 'touchend' : 'click';
+
+$('#books').on(eventType, function(e) {
+searchBible();
+});
+/*
+$('#dictionaries').on(eventType, function(e) {
+	console.log("doing search dic");
+	searchDictionary();
+});
+*/
+
 
 function dailydevotion(book){
 $.ajax({
@@ -127,6 +139,7 @@ $.ajax({
 	//console.log(e);
       if(e.data){
       $('#auxform').html(e.data);
+      $('#auxform_modal').modal('show');
    showLayer('closeaux') ;
       }
 }
@@ -280,24 +293,23 @@ for (i = 0; i < data.nchaps; i++) {
 
 function updateChaptersbybook(bible,data)
 {
-//console.log("updateChaptersbybook");
-  var bk=$('#chapters');
   var book=bible;
  var chps=""
-  $('#chapters').html("");
+  //$('#chapters').html("");
 var lst = $('#chapters')[0]; 
 for (i = 0; i < data.nchaps; i++) {
-    lst.options[lst.options.length] = new Option(i+1, i+1);
-    chps=chps+ "<button onclick='return readChap(&quot;"+book+" " +(1+i) +"&quot;);'>"+(1+i)+"</button>" ;
+   // lst.options[lst.options.length] = new Option(i+1, i+1);
+    chps=chps+ "<button ontouchend='return readChap(&quot;"+book+" " +(1+i) +"&quot;);' onclick='return readChap(&quot;"+book+" " +(1+i) +"&quot;);'>"+(1+i)+"</button>" ;
 }; 
-  $('#chapters').val(lst);
+ // $('#chapters').val(lst);
  $('#chaps').html(chps);
 }
 function setChaps(bible){
 	//console.log("in setChapts");
 	//console.log(bible);
-//$('#bibles').text(bible);
-$.ajax({
+$('#chaps').html("");
+$('#reference').html("");
+if (bible){ $.ajax({
   type: "POST",
   url: "/gsword/gbook/getChaps",
   data: { bible: bible}
@@ -308,6 +320,7 @@ $.ajax({
   });
 
      updateReference(bible+" 1");
+}
            return false;
 }
 
@@ -363,7 +376,7 @@ $.ajax({
   //  Tweek.begin();
 }
 function updateDict(data){
-	showBox(data.data);
+	if(data.data) showBox(data.data);
 }
 function updateDictp(data){
 	showBox(data.data);
@@ -594,8 +607,10 @@ function showProtocolData(e){
     return false;
 }
 function showBox(e){
-//console.log("showbox:"+e);
-if(e!=null) $('#display_dict').html("<b>Click to close the dictionary</b><br/>"+e);
+if(e!=null) {
+$('#display_dict').html(""+e);
+$('#display_dict_modal').modal('show');
+}
 return false;
 }
 function offBox(){

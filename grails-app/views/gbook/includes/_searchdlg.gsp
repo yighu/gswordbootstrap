@@ -3,43 +3,24 @@
   <modalbox:modalIncludes />
  
   <table id="searchBox" class ='dialog'>
-	<tr class ='title'>
-		<td colspan ='3' ><g:message code="studio" />
-
-		</td>
-        <td colspan ='9' > 
-            <div id="info" name="info" />
+    <tr >
+		<td>
+			<input type="text" placeholder="关键字Key Word" id="keyword" onblur="searchBible();" onchange="searchBible();" title="Input Key word for Bible/Dictionary Lookup"/>
+			
+			<g:select name="books" id="books" class ="books" noSelection='["${version}":"圣经Bible"]' title="Select Main Bible"
+			  from="${books}" value="name" optionKey="initials" optionValue="name" onchange="searchBible();" />
+			<g:select name="dictionaries" id="dictionaries"  class ='dictionaries' noSelection="['easton':'词典Dictionary']" title="Dictonary Lookup" from="${dictionaries}" value="name" optionKey="initials" optionValue="name"  onchange="searchDictionary();" />
+			<g:select id="parallels" name="parallels" class = "books" onchange="flip_parallel();" noSelection="['':'对照Parallel']"   title="Select Parallel Bible"
+                from="${books}" value="name" optionKey="initials" optionValue="name"/>
+			<g:select onchange="flip_commentary();" name="commentaries" id="commentaries" class ='books'  noSelection="['':'注解Commentary']" title="Select Commentary"
+                from="${commentaries}"  value="name" optionKey="initials" optionValue="name" />
 		</td>
 <!--
-        <td>
-          <a href="/gsword/help/help.xhtml" target="_blank"><g:message code="help" /></a>
-        </td>
--->
-	</tr>
-    <tr >
-		<td class ="labelright" title="Input Key word for Bible or Dictionary Lookup">
-<g:message code="searchword" />:
-        </td>
-		<td>
-			<input type="text" id="keyword" onblur="searchBible();" onchange="searchBible();"/>
-		</td>
-		<td  class ="labelright"> <g:message code="bible" />: </td>
-		<td title="Select a Bible before search">
-			
-			<g:select name="books" id="books" class ="books" noSelection='["${version}":"${version}"]'
-			  from="${books}" value="name" optionKey="initials" optionValue="name" onchange="searchBible();"  ontouchend="searchBible();" onclick="searchBible();" />
-		</td>
-
-		<td  class ="labelright"> <g:message code="parallelbible" />: </td>
-		<td title="select a Bible for parallel study">
-			<g:select id="parallels" name="parallels" class = "books" onchange="flip_parallel();" noSelection="['':'']"
-                from="${books}" value="name" optionKey="initials" optionValue="name"/>
-		</td>
 		<td class ='labelright'>
 			<g:message code="choosebook" />: 
 		</td>
 		<td>
-			<g:select name="bibles" id="bibles" class ='bibles' noSelection="['':'']"
+			<g:select name="bibles" id="bibles" clas='bibles' noSelection="['':'']"
               from="${bibles}"  
             optionValue="shortname"
                 optionKey="key"
@@ -47,7 +28,6 @@
               />
 
 		</td>
-<!--
 		<td class ="labelright" >
             <g:message code="oneyearbible" />:
 		</td>
@@ -65,25 +45,8 @@
     </tr>
     <tr>
 		  
-		<td  class ="labelright" title="Input the verses you want to display here">
-			<g:message code="verse" />:
-		</td>
-		<td>
-			<input type="text" id="reference" value="${ref}" onchange="locate();" onblur="locate();"/>
-		</td>
-		<td  class ="labelright"> <g:message code="dictionary" />: </td>
-		<td title="Select a dictionary to search the key word">
-			<g:select name="dictionaries" id="dictionaries"  class ='dictionaries' noSelection="['easton':'Eastons Bible Dictionary']"
-              from="${dictionaries}" value="name" optionKey="initials" optionValue="name"  onchange="searchDictionary();" onclick="searchDictionary();" />
-		</td>&nbsp;	  
 
-		<td  class ="labelright">
-			<g:message code="commentaries" />:
-		</td>
-		<td title="Select a commentary">
-			<g:select onchange="flip_commentary();" onclick="flip_commentary();" name="commentaries" id="commentaries" class ='books'  noSelection="['':'']"
-                from="${commentaries}"  value="name" optionKey="initials" optionValue="name" />
-		</td>
+<!--
         <td   class ="labelright">
             <g:message code="choosechapter" />: 
 		</td>
@@ -92,6 +55,7 @@
               from="${chapters}"
 				onchange="updateReference(\$(\'#bibles\').val()+\' \'+ escape(this.value));"/>
 		</td>
+-->
 <!--
 	    <td>
         <g:message code="dailyfood" />:
@@ -114,48 +78,27 @@
     </tr>
 </table>
 <table>
-	<tr>
-		<td   colspan =4 height =10px></td>
-	</tr>
     <tr>
-		<td  class ="labelright">
-		<g:message code="total" />:&nbsp;<input type="text" id="total" name="total" value="${total}" size="5" maxlength="4" readonly/>
-		</td>
-		<td>
-			&nbsp;
-			<button type="button" id="prev" onclick="prev();" title="Click for previous 10 verses">< <g:message code="default.paginate.prev" /></button>&nbsp;
-			<button type="button" id="next" onclick="nextstep();" title="Click for next 10 verses"><g:message code="default.paginate.next" /> ></button>
-		</td>
-        <td>
             <button type="button" id="showstrongs" onclick="showstrongs();" title="Click to on/off Strong number. Best used with KJV Bible"><g:message code="strongs" /></button>&nbsp;
 
-        </td>
          <!--td>
             <button type="button" id="showmorph" onclick="showmorph();"><g:message code="morphology" /></button>&nbsp;
 
          </td-->
-        <td>
             <button type="button" id="shownotes" onclick="shownotes();" title="Click to on/off notes. Best used with KJV Bible"><g:message code="notes" /></button>&nbsp;
-        </td>
-        <td>
             <button type="button" id="showheadings" onclick="showheadings();" title="Click to on/off headings. Best used with KJV Bible"><g:message code="headings" /></button>&nbsp;
-        </td>
         <!--td>
             <button type="button" id="showxref" onclick="showxref();" title="Click to on/off xref. Best used with KJV Bible"><g:message code="xref" /></button>&nbsp;
         </td-->
-          <td>
               <button type="button" id="showverseline" onclick="showverseline();" title="Click to swith 1 or multiple verses a line"><g:message code="verseperline" /></button>&nbsp;
 
-          </td>
 
-         <td title="Click to generate PowerPoint file">
            <button type="button" id="ppt" onclick="genppt();">PPT</button>&nbsp;
            %{--<button type="button" id="excl" onclick="genexcl();">Excel</button>&nbsp;--}%
           <!--td><button onclick="showcomment();"><g:message code="comment" /></button></td-->
-          </td>
           <!--td><button onclick="showhelp();"><g:message code="help" /></button></td-->
-          <td><button onclick="showadvsearch();"><g:message code="AdvancedSearch" /></button></td>
-
+          <button onclick="showadvsearch();"><g:message code="AdvancedSearch" /></button>
+</td>
     </tr>
 
 
@@ -163,39 +106,82 @@
 
 <table>
   <tr> 
-  <td width="10" valign="top" title="Select a book to read">
+  <td  valign="top" title="Select book">
     
       <g:message code="books" />
      <g:if test="${bibles}">
+	<g:select name="bibles" id="bibles" class ='bibles' noSelection="['':'书Book']"
+              from="${bibles}"  
+            optionValue="shortname"
+                optionKey="key"
+                onchange="setChaps(this.value);"
+              />
+<!--
+                onchange="updateChaptersperbible(this.value);"
             <g:each in="${bibles}" status ="i" var="b">
-            <!--a href="bible://${b.shortname}"  id="b${b}" onClick='return setChaps(&quot;${b.key}&quot;);'>
-             ${b.shortname}
-           </a-->
             <button id="b${b}" onClick='return setChaps(&quot;${b.key}&quot;);'>
              ${b.shortname}
            </button>
             </g:each>
+-->
 
              </g:if>
-  </td>
-  <td valign="top" title="Select a chapter to read">
-      <table>
-   <tr><td id="xchaps" name="xch" valign="top">
-      <g:message code="chapters" /><div id="chaps" name="chaps" />
+			<input type="text" placeholder="章节Verses" id="reference" value="${ref}" onchange="locate();" onblur="locate();" title="Input the verse to display"/>
+		<input type="text" id="total" name="total" placeholder="总数Total" value="${total}" size="4" maxlength="4" readonly/>
+			<button type="button" id="prev" onclick="prev();" title="Click for previous 10 verses">< <g:message code="default.paginate.prev" /></button>&nbsp;
+			<button type="button" id="next" onclick="nextstep();" title="Click for next 10 verses"><g:message code="default.paginate.next" /> ></button>
+            <div id="info" name="info" />
+<div id="chaps" name="chaps" />
       </td>
 </tr>   
 <tr>
           <td valign="top" >
-    		<div id="display_dict" onkeypress="offBox();" onclick="offBox();" name="display_dict"/>
+
+<!-- Modal -->
+<div class="modal fade" id="display_dict_modal" name="display_dict_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Topic Detail</h4>
+      </div>
+      <div class="modal-body" id="display_dict" name="display_dict">
+   <b> ${keyword}</b> <br/><br/>${keyvalue?.encodeAsRaw()}
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
             <br/>
   </td>
   </tr>
 <tr>
           <td valign="top" >
-		
+<!--		
     		<div id="auxform" name="auxform"></div>
     		<button id="closeaux" name="closeaux" style="display:none" onclick="offAuxform();">Click Me to close</button>
-            <br/>
+-->
+<!-- Modal -->
+<div class="modal fade" id="auxform_modal" name="auxform_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Advanced Search</h4>
+      </div>
+      <div class="modal-body" id="auxform" name="auxform">
+   <b> ${keyword}</b> <br/><br/>${keyvalue?.encodeAsRaw()}
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
   </td>
   </tr>
   <tr>

@@ -62,9 +62,28 @@
   </table>
   </g:form>
  <br/>
-  <div id="display_dict" name="display_dict">
+  <div id="display_dict_bk" name="display_dict_bk">
    <b> ${keyword}</b> <br/><br/>${keyvalue?.encodeAsRaw()}
     </div>
+<!-- Modal -->
+<div class="modal fade" id="display_dict_modal" name="display_dict_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Display Topic Detail</h4>
+      </div>
+      <div class="modal-body" id="display_dict" name="display_dict">
+   <b> ${keyword}</b> <br/><br/>${keyvalue?.encodeAsRaw()}
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 <br/>
       <g:if test="${bookkey}">
         <div style="padding: 10px"><div style="background:#DFDDD1;font-weight: bold; padding:10px">

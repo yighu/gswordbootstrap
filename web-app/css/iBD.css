@@ -45,7 +45,7 @@ div        { padding:   0px; }
 
 /** derived from BibleDesktop simple.xsl ******/
 A                { text-decoration: none; }
-A.strongs        { color: black; text-decoration: none; }
+.strongs        { color: black; text-decoration: none; }
 SUB.strongs      { font-size: 75%; color: red; }
 SUB.morph        { font-size: 75%; color: blue; }
 SUB.lemma        { font-size: 75%; color: red; }

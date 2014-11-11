@@ -1444,7 +1444,14 @@ private String readStyledText(String bookInitials, String reference, int start, 
     htmlsep.setParameter("direction", direction ? "ltr" : "rtl"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     // Finally you can get the styled text.
-    return XMLUtil.writeToString(htmlsep);
+	def resulttxt=""
+	try{
+	resulttxt=XMLUtil.writeToString(htmlsep);
+	}catch (Exception e){
+		println "Exception doing formating"
+	}
+	
+	resulttxt
   }
 def readStyledText4pray(String bookInitials, String reference, int start, int maxKeyCount) throws NoSuchKeyException, BookException, SAXException {
     def mainbook = "KJV";
