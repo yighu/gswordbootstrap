@@ -696,6 +696,16 @@ function showadvsearch(){
   		});
       }
 	
+function searchGen2(){
+    var chap=$('#genbooksch2').val()  ;
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/gentxtremote",
+  data: { key: chap}
+}).done(function( msg ) {
+   updateFormgen(msg);
+  });
+}
 function searchGen(){
     var chap=$('#genbooksch').val()  ;
 $.ajax({
