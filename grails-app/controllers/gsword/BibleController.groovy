@@ -111,6 +111,7 @@ private findVersion(List books, String version) {
   }
   def readgen={
     List books = Books.installed().getBooks(BookFilters.getGeneralBooks());
+println books
        session.state_vline=true
      
        def layer=0

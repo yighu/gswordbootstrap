@@ -18,6 +18,9 @@
 		<div class="collapse navbar-collapse navbar-ex1-collapse" role="navigation">
 
 		<ul class="nav navbar-nav">
+			<g:render template="/_menu/classics"/>
+		</ul>
+		<ul class="nav navbar-nav">
 			<g:render template="/_menu/bible"/>
 		</ul>
 		<ul class="nav navbar-nav">

@@ -132,7 +132,7 @@ class GbookController {
       if (k?.getChildCount() > 1) {
         result.addAll( printkey_dropdown(k, level + 1, base + "${DELIM}" + k.getName(), book))
       } else {
-        def kk = base + DELIM + k?.getName()
+        def kk = base + DELIM + k?.getName().trim()
         //result.add(kk.encodeAsHTML())
         result.add(kk)
       }
@@ -161,6 +161,7 @@ private convertNonAscii(String s) {
   }
 
   def gentxt = {
+      session.state_vline = "true"
     def layers = params.key?.decodeHTML()?.split("${DELIM}")
     def nl = layers.size()
     Book book = jswordService.getBook(layers[0]);
@@ -265,6 +266,7 @@ private convertNonAscii(String s) {
     }
     rst = params.id + "<br/><hr/>" + genToc(params.id)
     def result = ""
+      session.state_vline = "true"
     if (params.ref) {
       result = readStyledText(params.id, params.ref, 0, 2000)
     }

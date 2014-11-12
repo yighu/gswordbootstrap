@@ -2,6 +2,7 @@ var selectedbooks=new Array();
 var console=console||{}; //make console not break on ie
 //console.log=console.log||function(){};//turn this on for dev
 console.log=function(){}; //turn off log before prod build
+
 var eventType = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent) ) ? 'touchend' : 'click';
 
 $('#books').on(eventType, function(e) {
@@ -115,6 +116,20 @@ $.ajax({
     }
 }
 
+function displayBible(reference){
+ var bible="ChiUns";
+console.log(reference);
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/display",
+  data: { bible: bible, key: reference,start:0,limit:500}
+})
+  .done(function( msg ) {
+	console.log(msg);
+    updateAuxForm(msg);
+  });
+}
+
 function locate(){
   var bible=getBooks();
   var reference=$('#reference').val();
@@ -136,11 +151,11 @@ $.ajax({
   $('#info').html(msg);
   }
   function updateAuxForm(e){
-	//console.log(e);
+	console.log(e);
       if(e.data){
       $('#auxform').html(e.data);
       $('#auxform_modal').modal('show');
-   showLayer('closeaux') ;
+   //showLayer('closeaux') ;
       }
 }
   function updateForm(result){

@@ -50,6 +50,8 @@
   <!-- currently these are not used, but they are for morphologic forms -->
   <xsl:param name="greek.morph.protocol" select="'gmorph:'"/>
   <xsl:param name="hebrew.morph.protocol" select="'hmorph:'"/>
+<xsl:variable name="apos">'</xsl:variable>
+<xsl:variable name="quot">"</xsl:variable>
 
   <!-- The absolute base for relative references. -->
   <xsl:param name="baseURL" select="''"/>
@@ -799,7 +801,9 @@
   <xsl:template match="reference">
     <xsl:choose>
       <xsl:when test="$XRef = 'true'">
-        <a href="bible://{@osisRef}" onclick='return setPassage(&quot;{@osisRef}&quot;);'><xsl:apply-templates/></a>
+        <button onclick='displayBible(&quot;{@osisRef}&quot;);'>
+        <xsl:apply-templates/>
+</button>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates/>
@@ -810,7 +814,9 @@
   <xsl:template match="reference" mode="jesus">
     <xsl:choose>
       <xsl:when test="$XRef = 'true'">
-        <a href="bible://{@osisRef}" onclick='return setPassage(&quot;{@osisRef}&quot;);'><xsl:apply-templates mode="jesus"/></a>
+        <button onclick='displayBible(&quot;{@osisRef}&quot;);'>
+        <xsl:apply-templates mode="jesus"/>
+</button>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates mode="jesus"/>
