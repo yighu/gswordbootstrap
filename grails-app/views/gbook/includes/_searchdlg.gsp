@@ -79,6 +79,7 @@
 </table>
 <table>
     <tr>
+<td>
             <button type="button" id="showstrongs" onclick="showstrongs();" title="Click to on/off Strong number. Best used with KJV Bible"><g:message code="strongs" /></button>&nbsp;
 
          <!--td>

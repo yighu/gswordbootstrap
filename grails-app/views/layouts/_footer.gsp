@@ -17,7 +17,7 @@
 						</a>
 					</li>
 			    		<li class="glyphicon"></i>
-<button class="noteButton" onclick="takenote();" title="Click me to take note at page bottom">&nbsp;&nbsp;&nbsp;</button>
+<button class="noteButton" onclick="takenote();" title="Click me to take note at page bottom">&nbsp;&nbsp;&nbsp;Notes</button>
 	</li>
 				</ul>
 			</div>
