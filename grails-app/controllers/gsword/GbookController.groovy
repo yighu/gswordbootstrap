@@ -460,6 +460,71 @@ cat.each{c->
 
 
   }
+    def threeyearbible = {
+
+    def version = params.version
+    if (!version) {
+      version = "ChiUns"
+    }
+
+     session.state_headings= "true"
+     session.state_notes="true"
+    def key
+    if (!(params.book || params.chapter || params.verse)) {
+      key= getthreeyearschedule()
+    } else {
+      key = params.book
+      if (!params.book) {
+        key = "gen"
+      }
+      def chapter = params.chapter
+      if (chapter) {
+        key += " " + chapter
+      }
+      def verse = params.verse
+
+      if (verse) {
+        key += ":" + verse
+      }
+    }
+    def start = 0;
+    if (params.start) {
+      start = Integer.parseInt(params.start) - 1
+      if (start < 0) {
+        start = 0;
+      }
+    }
+
+
+    def result
+	try{
+	result = readStyledText(version, key, start, 200)
+	}catch (Exception e){
+		println ("exception get ${version} ${key}	")
+	}
+    def total=0
+	try{
+	total= jswordService.getCardinality(version, key)
+	}catch (Exception e){
+		println ("exception total get ${version} ${key}	")
+}
+
+    List books = Books.installed().getBooks(BookFilters.getBibles());
+    List dictionaries = Books.installed().getBooks(BookFilters.getDictionaries());
+    List commentaries = Books.installed().getBooks(BookFilters.getCommentaries());
+    List devotions = Books.installed().getBooks(BookFilters.getDailyDevotionals());
+    def bibles = jswordService.getBibles(session).bibles
+    def bible = "KJV"
+    def chapters = jswordService.getChapters(bible);
+    def mainbooks = new ArrayList()
+    mainbooks.add("ChiUns")
+    mainbooks.add("ChiUn")
+    mainbooks.add("ChiNCVs")
+    mainbooks.add("ChiNCVt")
+    mainbooks.add("KJV")
+    // mainbooks.add("ESV")
+    render(view: 'threeyearbible', model: [results: result, ref: key, version: version, total: total, mainbooks: mainbooks, books: books, dictionaries: dictionaries, commentaries: commentaries, bibles: bibles, chapters: chapters, devotions: devotions,metadesc:key])
+}
     def oneyearbible = {
 
     def version = params.version
@@ -1175,7 +1240,24 @@ if(params.comment) sendMail {
   }
   public static final dailyschedule = new HashMap()
   private static final URL scheduletxt = ResourceUtil.getResource("daily.txt");
-
+  private static final URL threeyearscheduletxt = ResourceUtil.getResource("threeyeardaily.txt");
+  def getthreeyearschedule(){
+		def idx=index4today(2013,9,12,1095)
+		def vs="gen 1"
+  		threeyearscheduletxt.eacheLine{i,d->
+			if (i==idx)vs=d
+		} 
+		vs
+	}
+	def index4today(year,mon,day,leng){
+	  GregorianCalendar start= new GregorianCalendar(year,mon,day);
+  GregorianCalendar end= new GregorianCalendar();
+  long ms1 = start.getTime().getTime();
+  long ms2 = end.getTime().getTime();
+  long difMs = ms2-ms1;
+  long msPerDay = 1000*60*60*24;
+  ((int)(difMs / msPerDay)).mod(leng);
+	}
   private getSchedule() {
     if (dailyschedule.isEmpty()) {
       scheduletxt.eachLine {line ->
