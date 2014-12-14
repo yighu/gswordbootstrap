@@ -447,6 +447,17 @@ $.ajax({
   });
   setBook(bible);
   }
+  function showword3yr(bible){
+$.ajax({
+  type: "POST",
+  url: "/gsword/gbook/daily3yr",
+  data: { bible: bible }
+})
+  .done(function( msg ) {
+    updateForm(msg);
+  });
+  setBook(bible);
+  }
  function doSearch(){
      var key="";
      var range=$('#range').val();

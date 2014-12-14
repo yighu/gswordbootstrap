@@ -1,5 +1,7 @@
 package gsword
+import java.util.Random  
 import org.crosswire.common.xml.*
+import grails.gsp.PageRenderer
 import java.io.*;
 import groovy.xml.MarkupBuilder
 import org.crosswire.jsword.book.*
@@ -460,6 +462,87 @@ cat.each{c->
 
 
   }
+
+
+def selectEvoke(){
+
+def txt=["psa 16:8","psa 27:4", "psa 27:9-10","psa 40:16-17","psa 63:1-3","psa 84:5-7","psa 103:1-2", "psa 139:7-10","isa 57:15","matt 11:28-30","john 4:23", "eph 1:17-19","eph 3:16-20"]
+def max= txt.size()
+def rand = new Random()  
+def idx=rand.nextInt(max)
+def chosen="gen 1"
+txt.eachWithIndex{v,id->
+if (id==idx)chosen=v
+}
+chosen
+}
+
+    def threeyearbible = {
+
+    def version = params.version
+    if (!version) {
+      version = "KJV"//"ChiUns"
+    }
+
+     session.state_headings= "true"
+     session.state_notes="true"
+    def key
+    if (!(params.book || params.chapter || params.verse)) {
+      key= getthreeyearschedule()
+    } else {
+      key = params.book
+      if (!params.book) {
+        key = "gen"
+      }
+      def chapter = params.chapter
+      if (chapter) {
+        key += " " + chapter
+      }
+      def verse = params.verse
+
+      if (verse) {
+        key += ":" + verse
+      }
+    }
+    def start = 0;
+    if (params.start) {
+      start = Integer.parseInt(params.start) - 1
+      if (start < 0) {
+        start = 0;
+      }
+    }
+
+	
+	def evoke= readStyledText(version, selectEvoke(), 0, 20)
+    def result
+	try{
+	result = readStyledText(version, key, start, 200)
+	}catch (Exception e){
+		println ("exception get ${version} ${key}	")
+	}
+    def total=0
+	try{
+	total= jswordService.getCardinality(version, key)
+	}catch (Exception e){
+		println ("exception total get ${version} ${key}	")
+}
+
+    List books = Books.installed().getBooks(BookFilters.getBibles());
+    List dictionaries = Books.installed().getBooks(BookFilters.getDictionaries());
+    List commentaries = Books.installed().getBooks(BookFilters.getCommentaries());
+    List devotions = Books.installed().getBooks(BookFilters.getDailyDevotionals());
+    def bibles = jswordService.getBibles(session).bibles
+    def bible = "KJV"
+    def chapters = jswordService.getChapters(bible);
+    def mainbooks = new ArrayList()
+    mainbooks.add("ChiUns")
+    mainbooks.add("ChiUn")
+    mainbooks.add("ChiNCVs")
+    mainbooks.add("ChiNCVt")
+    mainbooks.add("KJV")
+    // mainbooks.add("ESV")
+    render(view: 'threeyearbible', model: [results: result,evoke:evoke, ref: key, version: version, total: total, mainbooks: mainbooks, books: books, dictionaries: dictionaries, commentaries: commentaries, bibles: bibles, chapters: chapters, devotions: devotions,metadesc:key])
+}
     def oneyearbible = {
 
     def version = params.version
@@ -1175,7 +1258,23 @@ if(params.comment) sendMail {
   }
   public static final dailyschedule = new HashMap()
   private static final URL scheduletxt = ResourceUtil.getResource("daily.txt");
-
+  private static final URL threeyearscheduletxt = ResourceUtil.getResource("threeyeardaily.txt");
+  private static final threeplan=new File("threeyeardaily.txt")
+  def getthreeyearschedule(){
+		def idx=index4today(2013,9,12,1095)
+		def vs="gen 1"
+  		vs=getThreeyearSchedule().get(idx) 
+		vs
+	}
+	def index4today(year,mon,day,leng){
+	  GregorianCalendar start= new GregorianCalendar(year,mon,day);
+  GregorianCalendar end= new GregorianCalendar();
+  long ms1 = start.getTime().getTime();
+  long ms2 = end.getTime().getTime();
+  long difMs = ms2-ms1;
+  long msPerDay = 1000*60*60*24;
+  ((int)(difMs / msPerDay)).mod(leng);
+	}
   private getSchedule() {
     if (dailyschedule.isEmpty()) {
       scheduletxt.eachLine {line ->
@@ -1190,6 +1289,15 @@ if(params.comment) sendMail {
     }
 
     dailyschedule
+  }
+	List threeschedule=new ArrayList()
+  private getThreeyearSchedule() {
+    if (threeschedule.isEmpty()) {
+  threeyearscheduletxt.eachLine {line ->
+    		threeschedule.add(line) }
+      }
+
+    		threeschedule
   }
 
   String today() {
@@ -1248,15 +1356,54 @@ xml.records() {
     readStyledText(book, scheules.get(td), 0, 500)
   }
 
+ def genDaily(results){
+	def evoke= readStyledText(params.bible?:"KJV", selectEvoke(), 0, 20)
+"""
+	<h1>Approaching God亲近神</h1>      
+<p>	Think of the privilege of Prayer. Realize God is Present. Ask Him to help you pray.</p>
+<p>思想我们祷告的权柄。意识到神就在这儿。请他帮助祷告。</p>
+      ${evoke.encodeAsRaw()}
+	<h1>Meditate His Word诵读默思他的话语</h1>      
+      ${results.encodeAsRaw()}
+<br/>
+<p>Discern one or two truths you learn from these passages. Choose the one that most impresses you and write it in a sentence. </p><p>Now ask: How does this truth help me praise God? How does it show me a sin to confess? How does it show me something to ask God for? </p>	
+<p>从这段经文中找出一两个真理。选择其中一个并写成句。问这些问题：这个真理如何帮助我赞美神？他如何揭示我当承认的罪？他如何显明我哪些方面需要求神帮助。</p>
+<br/>
+	<h1>Word Prayer话语祷告</h1>      
+	<p>Turn the answers to the three questions into prayer-adoration, petition, and supplication</p>
+	<p>将对这三个问题的答案转为祷告：颂赞，请求和祷告</p>
+	<h1>Free Prayer自由祷告</h1>      
+<p> Pray about whatever needs are on your heart. Spend time thanking God for the ways you see him working in your life and caring for you.  </p>
+<p>将内心的负担向神祷告。感谢神在你生命中的工作和他对你的关爱。 </p>
+<h1>Contemplation沉思</h1>
+<p> Take a moment to thank and admire God for what he has showed you today. End with a note of praise. </p>
+<p>感谢神的带领并赞美他。 </p>
+<p>Note:The idea of praying through the Scripter was inspired by Pastor Timothy Keller through his book << Prayer >> </p>
+"""
+  }
+  private daily3yrtxt() {
+        session.state_vline = "true"
+  	def v=getthreeyearschedule()
+        def results=readStyledText(params.bible?: "KJV", v, 0, 500)
+
+  genDaily(results)
+  }
   private dailytxt() {
     def scheules = getSchedule()
     def td = today()
       session.state_vline = "true"
-    readStyledText(params.bible ?: "KJV", scheules.get(td), 0, 500)
+ def results=   readStyledText(params.bible ?: "KJV", scheules.get(td), 0, 500)
+  genDaily(results)
   }
 
   def daily = {
     def text = dailytxt();
+    def mp = new HashMap()
+    mp.put("data", text)
+    render mp as JSON
+  }
+  def daily3yr = {
+    def text = daily3yrtxt();
     def mp = new HashMap()
     mp.put("data", text)
     render mp as JSON

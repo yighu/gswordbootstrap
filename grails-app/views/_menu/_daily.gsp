@@ -5,6 +5,9 @@
 				<g:link controller="gbook" action="oneyearbible">
 					<g:message code="oneyearbible"/>	
 				</g:link>
+				<g:link controller="gbook" action="threeyearbible">
+					<g:message code="threeyearbible"/>	
+				</g:link>
 			</li>
 			<li class="controller">
 				<g:link controller="gbook" action="dailydevotions">
