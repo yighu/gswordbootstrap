@@ -28,5 +28,6 @@
 %>
 <body onload='${tm}' >
  <g:render template="includes/daily" />
+ <g:render template="includes/joinemailgroups" />
 </body>
 </html>

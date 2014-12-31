@@ -24,7 +24,6 @@
 <g:each status="i" var="cat" in="${catlist}">
 <g:link action="vp" id="${i}" >-${cat}-</g:link>
 </g:each>
-<div>尽情大声的祷告吧!</div>
 </center>
 <g:each var="subc" in="${prayers}">
   <div><br/><center><h1>${subc.name?.trim()}</h1></center><br/></div>
@@ -34,6 +33,7 @@
  </g:each>
 </g:each>
 </div>
+ <g:render template="includes/joinemailgroups" />
 
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

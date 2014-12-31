@@ -26,5 +26,6 @@
 %>
 <body onload='${tm}' >
  <g:render template="includes/oneyearbible" />
+ <g:render template="includes/joinemailgroups" />
 </body>
 </html>

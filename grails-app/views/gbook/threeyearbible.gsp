@@ -26,5 +26,6 @@
 %>
 <body onload='${tm}' >
  <g:render template="includes/threeyearbible" />
+ <g:render template="includes/joinemailgroups" />
 </body>
 </html>

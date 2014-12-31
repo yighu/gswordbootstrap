@@ -1378,7 +1378,6 @@ xml.records() {
 <h1>Contemplation沉思</h1>
 <p> Take a moment to thank and admire God for what he has showed you today. End with a note of praise. </p>
 <p>感谢神的带领并赞美他。 </p>
-<p>Note:The idea of praying through the Scripter was inspired by Pastor Timothy Keller through his book << Prayer >> </p>
 """
   }
   private daily3yrtxt() {
