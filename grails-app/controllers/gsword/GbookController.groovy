@@ -1558,13 +1558,19 @@ private String readStyledText(String bookInitials, String reference, int start, 
       session.state_strongs = "false"
     }
     htmlsep.setParameter(STRONGS_NUMBERS, session.state_strongs)
+/*
     if (!session.state_notes) {
       session.state_notes= "false"
     }
+*/
+      session.state_notes= "true"
     htmlsep.setParameter(NOTES, session.state_notes)
+/*
     if (!session.state_headings) {
       session.state_headings= "false"
     }
+*/
+      session.state_headings= "true"
     htmlsep.setParameter(HEADINGS, session.state_headings)
     if (!session.state_xref) {
       session.state_xref= "false"
@@ -1575,11 +1581,13 @@ private String readStyledText(String bookInitials, String reference, int start, 
       session.state_morph = "false"
     }
     htmlsep.setParameter("Morph", session.state_morph)
-
+/*
     if (!session.state_vline) {
       session.state_vline = "true"
 
     }
+*/
+      session.state_vline = "true"
     htmlsep.setParameter("VLine", session.state_vline)
 
 	//println "here3"

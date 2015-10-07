@@ -1,7 +1,7 @@
 var selectedbooks=new Array();
 var console=console||{}; //make console not break on ie
 //console.log=console.log||function(){};//turn this on for dev
-console.log=function(){}; //turn off log before prod build
+//console.log=function(){}; //turn off log before prod build
 
 var eventType = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent) ) ? 'touchend' : 'click';
 
@@ -270,8 +270,11 @@ function setBook(data){
  }
 function updateChapters(data)
 {
+console.log("data:"+data);
   var bk=$('#chapters');
        var dd=data;
+   
+  $('#chapters').options=[];
   $('#chapters').options[0] = new Option("All Chapters",0);
  var chps=""
     var book=$('#bibles').val();
@@ -291,6 +294,7 @@ function updateChaptersbybookx(bible,data)
 {
   var bk=$('#chapters');
        var dd=data;
+  $('#chapters').options =[];
   $('#chapters').options[0] = new Option("All Chapters",0);
  var chps=""
     var book=bible;
@@ -311,12 +315,16 @@ function updateChaptersbybook(bible,data)
   var book=bible;
  var chps=""
   //$('#chapters').html("");
+$('#chapters').options=[];
 var lst = $('#chapters')[0]; 
+lst.options.length=0;
+lst.options=[];
+lst.options[0] = new Option('章Chapter','1' );
 for (i = 0; i < data.nchaps; i++) {
-   // lst.options[lst.options.length] = new Option(i+1, i+1);
+    lst.options[lst.options.length] = new Option(i+1, i+1);
     chps=chps+ "<button ontouchend='return readChap(&quot;"+book+" " +(1+i) +"&quot;);' onclick='return readChap(&quot;"+book+" " +(1+i) +"&quot;);'>"+(1+i)+"</button>" ;
 }; 
- // $('#chapters').val(lst);
+  $('#chapters').val(lst);
  $('#chaps').html(chps);
 }
 function setChaps(bible){

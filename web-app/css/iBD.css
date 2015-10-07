@@ -83,10 +83,13 @@ padding:5px 10px;
 
 
 }
-select.books,
+select.books, input,
 select.dictionaries
 {
-width:70px;
+width:80px;
+}
+input.info{
+width:80px;
 }
 select.chapters,
 select.commentaries,    
@@ -94,7 +97,7 @@ select.bibles,
 select.parallels,
 select.dailyword
 {
-width:55px;
+width:80px;
 }
 
 tr.title
