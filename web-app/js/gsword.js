@@ -118,14 +118,14 @@ $.ajax({
 
 function displayBible(reference){
  var bible="ChiUns";
-console.log(reference);
+//console.log(reference);
 $.ajax({
   type: "POST",
   url: "/gsword/gbook/display",
   data: { bible: bible, key: reference,start:0,limit:500}
 })
   .done(function( msg ) {
-	console.log(msg);
+	//console.log(msg);
     updateAuxForm(msg);
   });
 }
@@ -151,7 +151,7 @@ $.ajax({
   $('#info').html(msg);
   }
   function updateAuxForm(e){
-	console.log(e);
+	//console.log(e);
       if(e.data){
       $('#auxform').html(e.data);
       $('#auxform_modal').modal('show');
@@ -270,7 +270,7 @@ function setBook(data){
  }
 function updateChapters(data)
 {
-console.log("data:"+data);
+//console.log("data:"+data);
   var bk=$('#chapters');
        var dd=data;
    

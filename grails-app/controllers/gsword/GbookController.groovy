@@ -1712,7 +1712,7 @@ println "in readstyledtext:"+bookInitials+" "+key
    * @param data The key to find
    */
   private jump(Book book, String data) {
-    def text
+    def text="NA"
     if (book != null && Books.installed().getBook(book.getName()) != null) {
 
 
@@ -1721,8 +1721,9 @@ println "in readstyledtext:"+bookInitials+" "+key
            text+=readStyledText(book.getInitials(), "G"+data, new Integer(0), new Integer(300))
              text+=readStyledText(book.getInitials(), "H"+data, new Integer(0), new Integer(300))
       }*/
+	if(!text)text="No data found"
     }
-
+	println text
     Map rslt = new HashMap()
     rslt.put("result", text)
     rslt

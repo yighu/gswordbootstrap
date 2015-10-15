@@ -86,8 +86,8 @@
 		
 	</tr>
 </table>
-<div id="info" name="info" />
-<div id="chaps" name="chaps" style="display: none" />
+<div id="info" name="info" /></div>
+<div id="chaps" name="chaps" style="display: none" /></div>
 
 <div class="modal fade" id="display_dict_modal"
 	name="display_dict_modal" tabindex="-1" role="dialog"
@@ -111,7 +111,6 @@
 			</div>
 		</div>
 	</div>
-</div>
 </div>
 <div class="modal fade" id="auxform_modal" name="auxform_modal"
 	tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
