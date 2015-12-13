@@ -170,10 +170,11 @@ $.ajax({
       if( result.total){
 
         $('#total').val(result.total);
+        $('#total').html(result.total);
       }
   }
  function openwin(e){
-	var ptf="http://www.ccimweb.org/gsword/pt/"+e.data;
+	var ptf="pt/"+e.data;
           setInfo("<a href=\""+ptf+"\">Download PowerPoint Here</a>") ;
           popup(ptf, "PowerPoint") ;
 

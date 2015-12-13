@@ -24,7 +24,9 @@ fieldset.dialogbox
 {margin:10px 10px 10px 10px;
 border-bottom:1px solid #6699FF;
 }
-div        { padding:   0px; }
+div        { padding:   0px; 
+	display:inline-block;
+}
 #bibleBox  { margin:    2px; }
 #versions  { width:   200px; }
 #locateBox { margin:    2px; }
@@ -149,4 +151,11 @@ padding: 5px;
 
 .tooltip-inner {
     max-width: 350px;
+}
+
+
+.gput {
+	border:1px;
+	margin: 1px;
+	display:inline-block;
 }

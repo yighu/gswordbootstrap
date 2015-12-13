@@ -25,7 +25,7 @@
 		<p class="pull-right"><a href="#">Back to top 
 <g:message code="studio" />
 </a></p>
-
+<a href="http://www.freedomain.co.nr/" target="_blank" title="Free Domain Name" rel="nofollow"><img src="http://uecouaa.imdrv.net/nrlink.gif" width="88" height="31" border="0" alt="Free Domain Name" /></a>
 	</div>
 
 <div id="noteform" name="noteform"/>

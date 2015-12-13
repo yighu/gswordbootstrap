@@ -1081,8 +1081,8 @@ chosen
   def display = {
 
     def text = readStyledText(params.bible, params.key, Integer.parseInt(params.start), Integer.parseInt(params.limit))
-
-    def total = jswordService.getCardinality(params.bible, params.key)
+	def bbs=params.bible?.split(",")[0]
+    def total = jswordService.getCardinality(bbs, params.key)
 
     Map mp = new HashMap();
     mp.put("data", text)

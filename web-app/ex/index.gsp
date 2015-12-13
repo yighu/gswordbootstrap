@@ -22,14 +22,17 @@
 
 <div id="prayer_root"> </div>
 <br/>
-<br/>
-<br/>
-<a href="/gsword/ex/spiritandhealth.htm">心靈與健康 嚴惠來編</a><br>
-<br/>
-<a href="/gsword/ex/genesisintrobyyanhuilai.pdf"> 创世记导读与问题解答 嚴惠來</a><br>
-<br/>
-<a href="/gsword/ex/RevelationIntrobyYanhuilai.pdf"> 啓示錄導讀與問題解答 嚴惠來</a><br>
-
+<%
+def bks=new StringBuilder()
+applicationContext.getResource("/ex/books.txt").getFile().text.split("\n").each {bk->
+	def x=bk.split(':')	
+	def y=x.size()
+	if (y==2){
+	bks<<"<a href=\""<<x[1]<<"\">"<<x[0]<<"</a><br>"
+	}
+}
+%>
+${bks.toString()}
 </div>
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
