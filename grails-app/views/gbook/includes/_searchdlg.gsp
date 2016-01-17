@@ -60,7 +60,7 @@
 		</div>
 		<div class='gput' onclick="showadvsearch();"> <g:message code="AdvancedSearch" />
 		</div>
-		<div class='gput' class="noteButton" onclick="takenote();" title="Click me to take note at page bottom">&nbsp;&nbsp;&nbsp;</button>
+		<div class='gput' onclick="takenote();" title="Click me to take note at page bottom">Note
 	</div>
 		<div class='gput' type="button" id="ppt" onclick="genppt();">PPT</div>
 		
