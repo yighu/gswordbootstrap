@@ -188,7 +188,7 @@ public void toindexBook(Book book){
 try{
  def indxer=new BookIndexer(book)
  if (!indxer.isIndexed()){
-	//indxer.createIndex();
+	indxer.createIndex();
 	}
 }catch (Exception e){
 println "index exception "
@@ -207,13 +207,13 @@ println "index exception "
 	//println "in jsword search:"+bookInitials +" req:"+searchRequest
       def rst = ""
     Book book = getBook(bookInitials);
-	//toindexBook(book);
 
-println "done index..."
 	if (isIndexedb(book)){
 		println " book is indexed :"+bookInitials
 	}else{
-		//println " book is not indexed :"+bookInitials
+		println " book is not indexed :"+bookInitials
+		toindexBook(book);
+		println "done index..."+bookInitials
 	}
     if (isIndexedb(book) && searchRequest != null) {
 	//println "xin jsword search:"+bookInitials +" indexed"
